@@ -1,0 +1,15 @@
+curl -X POST -H 'Content-Type: application/json' -i 'http://localhost:8080/signup' --data '{"nickname":"Dan", "password":"12345"}'
+
+curl -X POST -H 'Content-Type: application/json' -i 'http://localhost:8080/signup' --data '{"nickname":"Francelly", "password":"12345"}'
+
+curl -X POST -H 'Content-Type: application/json' -i 'http://localhost:8080/signin' --data '{"nickname":"Dan", "password":"12345"}'
+
+curl -X POST -H 'Content-Type: application/json' -i 'http://localhost:8080/sheets' --data '{"name":"Planilha 1", "owner_id":1}'
+
+curl -X GET -H 'Content-Type: application/json' -i 'http://localhost:8080/sheets' --data '{"user_id":1}'
+
+curl -X PATCH -H 'Content-Type: application/json' -i 'http://localhost:8080/sheets' --data '{"user_id":2, "invite_code":"66acc27fc0be2385bf7d2d53e71718ac"}'
+
+curl -X PUT -H 'Content-Type: application/json' -i 'http://localhost:8080/sheets' --data '{"user_id":1, "spread_sheet_id":1, "new_name":"Gastos Mensais"}'
+
+curl -X DELETE -H 'Content-Type: application/json' -i 'http://localhost:8080/sheets' --data '{"spread_sheet_id":8}'
