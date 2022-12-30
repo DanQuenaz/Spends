@@ -1,0 +1,1 @@
+export {default as BotaoPadrao} from './BotaoPadrao'
