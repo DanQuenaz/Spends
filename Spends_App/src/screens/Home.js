@@ -28,6 +28,7 @@ import colors from "../styles/colors";
 import { ToastAndroid } from "react-native";
 import Swipeable from "react-native-gesture-handler";
 import { MonthSelector } from "../components/MonthSelector";
+import { MembrosPlanilha } from "../components/MembrosPlanilha";
 
 
 
@@ -291,29 +292,7 @@ const Home = () =>{
                             <Text style={{color:colors.cinza_1,fontFamily:'Roboto-Regular-Italic',fontSize:14}} >Gastos totais</Text>
                         </View>
                         <View>
-                            <TouchableOpacity onPress={()=>{Alert.alert(
-                                                    "Está certo disso?",
-                                                    "Você tem certeza que deseja fechar esta planilha?",
-                                                    [
-                                                      // The "Yes" button
-                                                      {
-                                                        text: "Sim",
-                                                        onPress: () => {
-                                                            closeSpends();
-                                                        },
-                                                      },
-                                                      // The "No" button
-                                                      // Does nothing but dismiss the dialog when tapped
-                                                      {
-                                                        text: "Não",
-                                                      },
-                                                    ]
-                                                  );}} style={styles.fecharCiclo}>
-                                <View style={{flexDirection:"row", justifyContent:'center', alignItems:'center'}}>
-                                    <Text style={{paddingRight:10, color:colors.branco}}>Fechar Ciclo</Text>
-                                    <IconIonicons name='ios-checkmark-circle-outline' size={16} color={colors.branco}/>
-                                </View>    
-                            </TouchableOpacity>
+                            <MembrosPlanilha></MembrosPlanilha>
                         </View>
                     </View>
                 </View>

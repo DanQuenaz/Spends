@@ -216,5 +216,28 @@ module.exports = app => {
         });
     };
 
+    const sheet_members = (req, res)=>{
+        const sql = `
+            SELECT TU.NICKNAME 
+            FROM TB_SPREAD_SHEETS TSS 
+                INNER JOIN TB_USERS_SHEETS TUS ON
+                    TSS.SPREAD_SHEET_ID = TUS.SPREAD_SHEET_ID 
+                INNER JOIN TB_USERS TU ON
+                    TU.USER_ID = TUS.USER_ID
+            WHERE TSS.SPREAD_SHEET_ID = ?
+        `
+
+        const parametros = [[req.quey.spread_sheet_id]]
+
+        app.db.query(sql, [parametros], (err, results)=>{
+            if(err){
+                return res.status(400).send('Erro ao executar processo!');
+            }
+            res.status(200).json(results);
+        });
+
+
+    };
+
     return { new_sheet, get_sheets, del_sheet, add_user_sheet, rename_sheet, close_spends }
 };
