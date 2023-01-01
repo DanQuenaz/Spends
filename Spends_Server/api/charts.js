@@ -38,7 +38,7 @@ module.exports = app =>{
 
         
         parametros = [];
-        console.log(req.query, sql)
+        (req.query, sql)
 
         app.db.query(sql, [parametros], (err, results) =>{
             if(err){

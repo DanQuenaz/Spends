@@ -11,7 +11,7 @@ module.exports = app => {
     
     const strategy = new Strategy(params, (payload, done) => {
         
-        console.log("PAYLOAD:" + payload)
+        ("PAYLOAD:" + payload)
         
         sql = ` SELECT  USER_ID
                         ,NICKNAME

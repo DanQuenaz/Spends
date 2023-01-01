@@ -177,7 +177,7 @@ const Charts = () =>{
                 
                 const result = await useApi(`/charts?spread_sheet_id=${spread_sheet_id}&type=${tipo_grafico}&month=${mes_ano_selecionado.mes}&year=${mes_ano_selecionado.ano}`, null, 'GET');
                 if(result.status == 200){
-                    console.log(result.data)
+                    (result.data)
                     if(tipo_grafico == 'tag'){
                         var dados_aux = [];
                         var total_aux = 0;
@@ -229,7 +229,7 @@ const Charts = () =>{
                     }
                 }
             }catch(e){
-                console.log(e)
+                (e)
             } 
         };
         fetchData();

@@ -35,10 +35,10 @@ const MonthSelector = (props, ref) =>{
                 setUltimosMeses(meses_aux);
 
             }else{
-                console.log("Erro")
+                ("Erro")
             }
         }catch(e){
-            console.log("Erro aqui", e)
+            ("Erro aqui", e)
         }
 
     };

@@ -14,14 +14,14 @@ const PopupMenu = ()=>{
 
     const logOff = async ()=>{
         try{
-            console.log("entrei aqui")
+            ("entrei aqui")
             const localStorage = new LocalStorage()
             await localStorage.removeData("@TOKEN");
             await localStorage.removeData("@USER_DATA");
             await localStorage.removeData("@DEFAULT_SHEET");
             navigation.navigate("Main")
         }catch(e){
-            console.log(e)
+            (e)
         }
     };
 

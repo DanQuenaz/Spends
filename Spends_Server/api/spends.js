@@ -9,14 +9,14 @@ module.exports = app => {
             del(req, res);
         };
         
-        console.log("BODY ", req.body);
-        let sql = `INSERT INTO TB_SPENDS(OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
+        ("BODY ", req.body);
+        let sql = `INSERT INTO TB_SPENDS(OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, INSTALLMENT_DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
         
         let installments_aux = req.body.installments_info
         let first_installment = installments_aux.shift()
 
-        let parametros = [[req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, first_installment.description, req.body.total_value, first_installment.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(first_installment.date).format("YYYY-MM-DD HH:mm:ss")]]
-        console.log("1", parametros)
+        let parametros = [[req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, req.body.description, first_installment.installment_description, req.body.total_value, first_installment.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(first_installment.date).format("YYYY-MM-DD HH:mm:ss")]]
+        ("1", parametros)
 
 
         app.db.query(sql, [parametros], (err, results, fields) => {
@@ -24,15 +24,15 @@ module.exports = app => {
                 return err => res.status(400).json(err);
             }
 
-            let sql = `INSERT INTO TB_SPENDS(INSTALLMENT_ID, OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
+            let sql = `INSERT INTO TB_SPENDS(INSTALLMENT_ID, OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, INSTALLMENT_DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
             let parametros = []
             let insertId = results.insertId
 
             installments_aux.forEach(element=>{
-                parametros.push([insertId, req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, element.description, req.body.total_value, element.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(element.date).format("YYYY-MM-DD HH:mm:ss")])
+                parametros.push([insertId, req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, req.body.description, element.installment_description, req.body.total_value, element.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(element.date).format("YYYY-MM-DD HH:mm:ss")])
             });
 
-            console.log("2", parametros)
+            ("2", parametros)
             app.db.query(sql, [parametros], (err, results, fields)=>{
                 if (err) {
                     return err => res.status(400).json(err);
@@ -55,12 +55,9 @@ module.exports = app => {
 
                     var stringNotification = req.body.notification;
                     
-                    if(users_keys){
+                    if(!!users_keys.length){
                         app.api.onesignal.notification_user(users_keys, stringNotification);
                     }
-                        
-             
-
                 });
 
             });
@@ -70,12 +67,13 @@ module.exports = app => {
 
 
     const get = (req, res) => {
-        console.log("GET SPENDS ",  req.query)
+        ("GET SPENDS ",  req.query)
         sql = `SELECT   TB_SPENDS.SPEND_ID
                         ,TB_USERS.NICKNAME
                         ,TB_SPREAD_SHEETS.NAME
                         ,TB_TAGS.NAME
                         ,TB_SPENDS.DESCRIPTION
+                        ,TB_SPENDS.INSTALLMENT_DESCRIPTION
                         ,TB_SPENDS.TOTAL_VALUE
                         ,TB_SPENDS.VALUE
                         ,TB_SPENDS.INITIAL_DATE
@@ -113,13 +111,14 @@ module.exports = app => {
     };
 
     const del = (req, res) => {
+        ("DEL:", req.query, req.body)
         sql = `
             DELETE FROM TB_SPENDS
             WHERE   SPEND_ID = ?
                     OR INSTALLMENT_ID = ${req.query.spend_id}
         `;
         parametros = [[req.query.spend_id]];
-        // console.log(sql)
+        // (sql)
         app.db.query(sql, [parametros], (err, results, fields)=>{
             if(err){
                 return err=>res.status(400).json(err);
@@ -140,7 +139,7 @@ module.exports = app => {
             WHERE SPEND_ID = ?
 
         `;
-        // console.log(req.body, sql)
+        // (req.body, sql)
         parametros = [[req.body.spend_id]];
         app.db.query(sql, [parametros], (err, results, fields)=>{
             if(err){
@@ -159,7 +158,7 @@ module.exports = app => {
             ORDER BY YEAR_SPEND, MONTH_SPEND;
         `;
 
-        console.log(req.query)
+        (req.query)
 
         let parametros = [[req.query.spread_sheet_id]];
 

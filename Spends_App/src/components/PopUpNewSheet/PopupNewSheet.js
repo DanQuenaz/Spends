@@ -56,8 +56,8 @@ const PopupNewSheet = (props)=>{
                              'x2j3m5n6p8',
                              'd2z2j3m5n6' ];
             baseCode.forEach(index =>{
-                // console.log(index)
-                // console.log(codigoNome.indexOf(index))
+                // (index)
+                // (codigoNome.indexOf(index))
                 if(codigoNome.indexOf(index)>=0){
                     retorno = true;
                 }
@@ -67,7 +67,7 @@ const PopupNewSheet = (props)=>{
         };
 
         if(isEnabled){
-            console.log("Entrei aqui")
+            ("Entrei aqui")
             const body_request = {
                 "user_id":User.getUser().user_id,
                 "invite_code":nome_planilha
@@ -79,7 +79,7 @@ const PopupNewSheet = (props)=>{
                         await localStorage.storeData("@DEFAULT_SHEET", result.data.spread_sheet_id + '')
                     }
                     ToastAndroid.show("Planilha criada com sucesso!", ToastAndroid.LONG);
-                    console.log(result.data)
+                    (result.data)
                     
                     if(planilha_principal) navigation.goBack();
                     
@@ -88,7 +88,7 @@ const PopupNewSheet = (props)=>{
                 }
             }catch(e){
                 ToastAndroid.show("Erro: " + e, ToastAndroid.LONG)
-                console.log(e)
+                (e)
             }
 
         }else{
@@ -104,15 +104,15 @@ const PopupNewSheet = (props)=>{
                     }
                     
                     ToastAndroid.show("Planilha criada com sucesso!", ToastAndroid.LONG);
-                    console.log(result.data)
+                    (result.data)
     
                     if(planilha_principal) navigation.goBack();
                 }else{
-                    console.log("AQI OD");
+                    ("AQI OD");
                 }
             }catch(e){
                 ToastAndroid.show("Erro: " + e, ToastAndroid.LONG)
-                console.log(e)
+                (e)
             }
         };
         setVisible(false);

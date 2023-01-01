@@ -125,10 +125,10 @@ const Sheets = () =>{
                     setCorpo(<SemDados texto='Sem planilhas cadastradas'/>)
                 }
             }
-            console.log(result.data);
+            (result.data);
         }
         catch(e){
-            console.log(e);
+            (e);
         }
     };
 

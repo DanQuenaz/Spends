@@ -48,11 +48,11 @@ const EditSpend = () =>{
             if(result.status == 200){
                 if(result.data[0]){
                     setItemsTags(result.data);
-                    // console.log(result.data, user_id);
+                    // (result.data, user_id);
                 }
             }
         }catch(e){
-            console.log(e)
+            (e)
         }
     };
 

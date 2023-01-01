@@ -54,11 +54,11 @@ const NewSpend = () =>{
             if(result.status == 200){
                 if(result.data[0]){
                     setItemsTags(result.data);
-                    // console.log(result.data, user_id);
+                    // (result.data, user_id);
                 }
             }
         }catch(e){
-            console.log(e)
+            (e)
         }
     };
 
@@ -67,8 +67,8 @@ const NewSpend = () =>{
         loadTags();
 
         if(route.params.atualizaDespesa){
-            console.log(route.params)
-            setValorSpend(route.params.valor);
+            (route.params)
+            setValorSpend(route.params.valor_total);
             setDescricaoSpend(route.params.descricao);
             setGastoFixo(route.params.fixado);
             setValueTags(route.params.tag);
@@ -87,55 +87,47 @@ const NewSpend = () =>{
                     spread_sheet_id: parseInt(User.getDefaultSpreadSheet()),
                     tag_id: value_tags,
                     fixed: gasto_fixo,
+                    description: descricao_spend,
                     total_value: valor_spend,
                     initial_date: data_despesa,
                     installments:parcelas,
                     notification: `${User.getUser().nickname} cadastrou ${descricao_spend} - ${formatToReal(valor_spend)} (${parcelas}x ${formatToReal(valor_spend/parcelas)})`,
-                    installments_info:[]
+                    installments_info:[],
+                    is_update:route.params.atualizaDespesa
                 };
                 if(parcelas > 1){
                     let valor_parcela = valor_spend/parcelas;
                     for(let i =0; i<parcelas; i++){
                         var data_aux = new Date(data_despesa);
-                        console.log(i, data_aux);
+                        (i, data_aux);
                         bodyRequest.installments_info.push({
-                            description: descricao_spend + ` ${i+1}/${parcelas}`,
+                            installment_description: ` ${i+1}/${parcelas}`,
                             value: valor_parcela,
                             date: data_aux.setMonth(data_aux.getMonth()+i)
                         });
                     };
-                        try{
-                            console.log(bodyRequest)
-                            const result = await useApi("/spends", bodyRequest, "POST");
-                            if(result.status == 200){
-                                navigation.navigate("Home");
-                                
-                            }else{
-                                Alert.alert("Erro", "Falha ao cadastrar despesa");
-                            }
-                        }catch(e){
-                            Alert.alert("Erro", "Falha ao cadastrar despesa"); 
-                        } 
-                    
+                         
                 }
                 else{
                     bodyRequest.installments_info.push({
-                        description: descricao_spend,
+                        installment_description: '',
                         value: valor_spend,
                         date: data_despesa
-                    })
-                    try{
-                        const result = await useApi("/spends", bodyRequest, "POST");
-                        if(result.status == 200){
-                            navigation.navigate("Home");
-                            
-                        }else{
-                            Alert.alert("Erro", "Falha ao cadastrar despesa");
-                        }
-                    }catch(e){
-                        Alert.alert("Erro", "Falha ao cadastrar despesa"); 
-                    } 
+                    });
+                }
 
+                try{
+                    (bodyRequest)
+                    const url = !!route.params.atualizaDespesa ? `/spends?spend_id=${route.params.spend_id}` : `/spends`
+                    const result = await useApi(url, bodyRequest, "POST");
+                    if(result.status == 200){
+                        navigation.navigate("Home");
+                        
+                    }else{
+                        Alert.alert("Erro", "Falha ao cadastrar despesa");
+                    }
+                }catch(e){
+                    Alert.alert("Erro", "Falha ao cadastrar despesa"); 
                 } 
             }{
                 if(num_cadastro>0){

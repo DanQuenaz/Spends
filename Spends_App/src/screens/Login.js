@@ -69,12 +69,12 @@ const Login = () => {
                 axios.defaults.headers.common['Authorization'] = `bearer ${result.data.token}`
                 await localStorage.storeData("@TOKEN", result.data.token)
                 await localStorage.storeData("@USER_DATA", JSON.stringify(result.data))
-                console.log(JSON.stringify(result.data));
+                (JSON.stringify(result.data));
                 navigation.navigate("HomeIndex");
             }
         }catch(e){
             Alert.alert("Erro ao logar", "Erro ao logar " + e)
-            console.log(e)
+            (e)
         }
     };
 
@@ -142,7 +142,7 @@ const Login = () => {
                 }
             }catch(e){
                 Alert.alert("Erro ao logar", "Erro ao logar " + e)
-                console.log(e)
+                (e)
             }
 
         }else{

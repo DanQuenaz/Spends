@@ -9,11 +9,11 @@ module.exports = app => {
     }
 
     const new_user = (req, res) => {
-        // console.log(req.body)
+        // (req.body)
 
         obterHash(req.body.password, hash => {
             const password = hash
-            // console.log(password)
+            // (password)
 
             sql = `SELECT EMAIL FROM TB_USERS WHERE UPPER(EMAIL) = UPPER(?)`
             parametros = [[req.body.email]]
@@ -46,7 +46,7 @@ module.exports = app => {
     }
 
     const get_user = (req, res) => {
-        // console.log(req.body)
+        // (req.body)
         const user =  app.db('TB_USERS')
             .whereRaw("LOWER(NICKNAME) = LOWER(?)", req.body.nickname)
             .first()

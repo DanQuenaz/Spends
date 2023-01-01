@@ -119,7 +119,7 @@ const Home = () =>{
                                     <View style={styles.itemLista} >
                                         <View style={{flex:8, flexDirection:'row', justifyContent:'space-between', paddingRight:10}}>
                                             <View style={{flexDirection:'column',justifyContent:'space-between'}} >
-                                                    <Text style={{fontFamily:'Roboto-Medium',color:colors.cinza_1,fontSize:20}} >{item.DESCRIPTION}</Text>
+                                                    <Text style={{fontFamily:'Roboto-Medium',color:colors.cinza_1,fontSize:20}} >{item.DESCRIPTION + item.INSTALLMENT_DESCRIPTION}</Text>
                                                     <Text>{item.NICKNAME}</Text>
                                                     <Text style={{fontFamily:'Roboto-Bold',fontSize:12}} >{moment(item.DATE).format("DD MMM HH:mm")}</Text>
                                             </View>
@@ -129,7 +129,7 @@ const Home = () =>{
                                         </View>
                                         <View style={{flex:1, flexDirection:'column', borderLeftColor:colors.cinza_1, borderLeftWidth:1, alignItems:'flex-end', justifyContent:'space-between'}} >
                                             <TouchableOpacity onPress={()=>{
-                                                navigation.navigate("NewSpend", {spend_id:item.SPEND_ID, valor:item.VALUE, descricao:item.DESCRIPTION, tag:item.TAG_ID, fixado:item.FIXED==1, data: item.INITIAL_DATE, parcelas: item.TOTAL_INSTALLMENTS, atualizaDespesa:true})
+                                                navigation.navigate("NewSpend", {spend_id:item.SPEND_ID, valor_total:item.TOTAL_VALUE, valor:item.VALUE, descricao:item.DESCRIPTION, tag:item.TAG_ID, fixado:item.FIXED==1, data: item.INITIAL_DATE, parcelas: item.TOTAL_INSTALLMENTS, atualizaDespesa:true})
                                             }}>
                                                 <Icon name='edit' size={18}/>
                                             </TouchableOpacity>
@@ -184,7 +184,7 @@ const Home = () =>{
             }
             
         }catch(e){
-            console.log(e)
+            (e)
             return e
         }
     };
@@ -210,18 +210,18 @@ const Home = () =>{
 
             //Method for handling notifications received while app in foreground
             OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
-            console.log("OneSignal: notification will show in foreground:", notificationReceivedEvent);
+            ("OneSignal: notification will show in foreground:", notificationReceivedEvent);
             let notification = notificationReceivedEvent.getNotification();
-            console.log("notification: ", notification);
+            ("notification: ", notification);
             const data = notification.additionalData
-            console.log("additionalData: ", data);
+            ("additionalData: ", data);
             // Complete with null means don't show a notification.
             notificationReceivedEvent.complete(notification);
             });
 
             //Method for handling notifications opened
             OneSignal.setNotificationOpenedHandler(notification => {
-            console.log("OneSignal: notification opened:", notification);
+            ("OneSignal: notification opened:", notification);
         });
             
         }
@@ -254,7 +254,7 @@ const Home = () =>{
     
     const cadastrar_planilha = () =>{
         navigation.navigate("Sheets") 
-        // console.log("Opa")       
+        // ("Opa")       
     }
 
     const openCadastroSpend = async ()=>{
