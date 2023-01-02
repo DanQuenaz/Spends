@@ -216,7 +216,7 @@ module.exports = app => {
         });
     };
 
-    const sheet_members = (req, res)=>{
+    const get_sheet_members = (req, res)=>{
         const sql = `
             SELECT TU.NICKNAME 
             FROM TB_SPREAD_SHEETS TSS 
@@ -235,9 +235,22 @@ module.exports = app => {
             }
             res.status(200).json(results);
         });
-
-
     };
+
+    const remove_sheet_member = (req, res)=>{
+        const sql = `
+            DELETE FROM TB_USERS_SHEETS
+            WHERE USER_ID = ?
+        `
+        const parametros = [[req.query.user_id]]
+
+        app.db.query(sql, [parametros], (err)=>{
+            if(err){
+                return res.status(400).send("Erro ao executar processo!");
+            }
+            res.status(200).send("Usuário deletado");
+        });
+    }
 
     return { new_sheet, get_sheets, del_sheet, add_user_sheet, rename_sheet, close_spends }
 };
