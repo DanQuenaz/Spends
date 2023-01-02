@@ -252,5 +252,5 @@ module.exports = app => {
         });
     }
 
-    return { new_sheet, get_sheets, del_sheet, add_user_sheet, rename_sheet, close_spends }
+    return { new_sheet, get_sheets, del_sheet, add_user_sheet, rename_sheet, close_spends, get_sheet_members, remove_sheet_member }
 };
