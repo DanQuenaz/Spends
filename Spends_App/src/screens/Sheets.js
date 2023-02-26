@@ -4,7 +4,7 @@ import { Alert, ScrollView, TouchableOpacity } from "react-native";
 
 import { Text, View } from "react-native";
 
-import { Share } from "react-native";
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import User from "../class/User";
@@ -19,6 +19,8 @@ import colors from "../styles/colors";
 import { useApi } from "../Hooks/useApi";
 import PopupNewSheet from "../components/PopUpNewSheet/PopupNewSheet";
 
+import { onShare } from "../functions/shareSheets";
+
 
 const Sheets = () =>{
     const [corpo, setCorpo] = useState(null);
@@ -28,24 +30,7 @@ const Sheets = () =>{
     const route = useRoute();
     const navigation = useNavigation();
 
-    const onShare = async (codigoPlanilha) => {
-        try {
-          const result = await Share.share({
-            message:codigoPlanilha
-          });
-          if (result.action === Share.sharedAction) {
-            if (result.activityType) {
-              // shared with activity type of result.activityType
-            } else {
-              // shared
-            }
-          } else if (result.action === Share.dismissedAction) {
-            // dismissed
-          }
-        } catch (error) {
-          alert(error.message);
-        }
-      };
+    
 
     const deletarPlanilha = async (planilhaId) =>{
         try{

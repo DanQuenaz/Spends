@@ -227,7 +227,7 @@ module.exports = app => {
             WHERE TSS.SPREAD_SHEET_ID = ?
         `
 
-        const parametros = [[req.quey.spread_sheet_id]]
+        const parametros = [[req.query.spread_sheet_id]]
 
         app.db.query(sql, [parametros], (err, results)=>{
             if(err){
@@ -252,5 +252,20 @@ module.exports = app => {
         });
     }
 
-    return { new_sheet, get_sheets, del_sheet, add_user_sheet, rename_sheet, close_spends, get_sheet_members, remove_sheet_member }
+    const get_invite_code_sheet = (req, res)=>{
+        const sql = `
+            SELECT INVITE_CODE
+            FROM TB_SPREAD_SHEETS
+            WHERE SPREAD_SHEET_ID = ?
+        `
+
+        const parametros = [[req.query.spread_sheet_id]]
+
+        app.db.query(sql, [parametros], (err, results)=>{
+            if(err) return res.status(400).send("Erro ao executar query!");
+            res.status(200).json(results)
+        })
+    }
+
+    return { new_sheet, get_sheets, del_sheet, add_user_sheet, rename_sheet, close_spends, get_sheet_members, remove_sheet_member, get_invite_code_sheet }
 };

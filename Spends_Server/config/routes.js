@@ -66,5 +66,8 @@ module.exports = app => {
         .all(app.config.passport.authenticate())
         .get(app.api.spends.months);
 
+    app.route('/sheets/get-invite-code')
+        .all(app.config.passport.authenticate())
+        .get(app.api.sheets.get_invite_code_sheet);
 
 };

@@ -292,7 +292,7 @@ const Home = () =>{
                             <Text style={{color:colors.cinza_1,fontFamily:'Roboto-Regular-Italic',fontSize:14}} >Gastos totais</Text>
                         </View>
                         <View>
-                            <MembrosPlanilha></MembrosPlanilha>
+                            <MembrosPlanilha spread_sheet_id={User.getDefaultSpreadSheet()}></MembrosPlanilha>
                         </View>
                     </View>
                 </View>
