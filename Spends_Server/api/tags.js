@@ -36,7 +36,7 @@ module.exports = app => {
     };
 
     const del = (req, res) => {
-        
+        console.log(req)
         sql = ` DELETE FROM TB_TAGS
                 WHERE   TAG_ID = ?`
         parametros = [[req.query.tag_id]]

@@ -5,8 +5,11 @@ import colors from "../../styles/colors";
 
 const BotaoPadrao = (props) =>{
     return (
-        <TouchableOpacity style={styles.botao} onPress = { () =>{props.funcaoClick()}}>
-            <Text style={styles.textoBotao}>{props.textoBotao}</Text>
+        <TouchableOpacity 
+            style={styles.botao} 
+            onPress = { () =>{props.funcaoClick()}}
+            disabled={props.disabled}>
+                <Text style={styles.textoBotao}>{props.textoBotao}</Text>
         </TouchableOpacity>
     )
 };
