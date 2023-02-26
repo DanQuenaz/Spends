@@ -15,9 +15,11 @@ const PopupNovaTag = (props)=>{
     const [visible, setVisible] = useState(false);
     const [nova_categoria, setNovaCategoria] = useState("");
     const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const salvarCategoria = async () =>{
+        setIsLoading(true);
         try{
             const data = {
                 owner_id : props.user_id,
@@ -34,10 +36,12 @@ const PopupNovaTag = (props)=>{
 
         }
         setVisible(false);
+        setIsLoading(false);
         
     };
 
     const deletarCategoria = async (tag_id)=>{
+        setIsLoading(true);
         try{
             
             const resultado = await useApi(`/tags/del?tag_id=${tag_id}`, null, 'GET');
@@ -50,6 +54,7 @@ const PopupNovaTag = (props)=>{
             ToastAndroid.show('Erro, tente mais tarde :(', ToastAndroid.LONG);
 
         }
+        setIsLoading(false);
     }
 
     return(
@@ -58,7 +63,7 @@ const PopupNovaTag = (props)=>{
                 <TouchableOpacity style={styles.maisTag} onPress={()=>{setVisible(!visible)}}>
                     <IconAntDesign name='plus' size={20}/>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.maisTag} onPress={()=>{ deletarCategoria(props.tag_id) }}>
+                <TouchableOpacity style={styles.maisTag} onPress={()=>{ deletarCategoria(props.tag_id) }} disabled={isLoading}>
                     <IconAntDesign name='delete' size={20}/>
                 </TouchableOpacity>
             </View>
@@ -70,7 +75,7 @@ const PopupNovaTag = (props)=>{
                             <Text style={{fontSize:24, color:colors.preto}}>Nova Categoria</Text>
                         </View>
                         <InputTexto textoPlaceHolder="Nome categoria" funcaoOnChangeText={setNovaCategoria}/>
-                        <BotaoPadrao textoBotao="Salvar Categoria" funcaoClick={salvarCategoria} />
+                        <BotaoPadrao textoBotao="Salvar Categoria" funcaoClick={salvarCategoria} disabled={isLoading}/>
                     </View>
                 </TouchableOpacity>
             </Modal>
