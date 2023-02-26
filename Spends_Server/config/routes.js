@@ -29,6 +29,14 @@ module.exports = app => {
         .all(app.config.passport.authenticate())
         .post(app.api.sheets.add_user_sheet);
 
+    app.route('/sheets/get-members')
+        .all(app.config.passport.authenticate())
+        .get(app.api.sheets.get_sheet_members);
+
+    app.route('/sheets/remove-members')
+        .all(app.config.passport.authenticate())
+        .delete(app.api.sheets.remove_sheet_member);
+
     app.route('/spends')
         .all(app.config.passport.authenticate())
         .get(app.api.spends.get)
@@ -58,5 +66,8 @@ module.exports = app => {
         .all(app.config.passport.authenticate())
         .get(app.api.spends.months);
 
+    app.route('/sheets/get-invite-code')
+        .all(app.config.passport.authenticate())
+        .get(app.api.sheets.get_invite_code_sheet);
 
 };
