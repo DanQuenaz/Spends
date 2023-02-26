@@ -23,6 +23,7 @@ const PopupNewSheet = (props)=>{
     const [tp_nome_planilha, setTpNomePlanilha] = useState(false);
     const [tp_texto_nome_planilha, setTpTextoNomePlanilha] = useState("");
     const [planilha_principal, setPlanilhaPrincipal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [isEnabled, setIsEnabled] = useState(false);
     
@@ -42,7 +43,7 @@ const PopupNewSheet = (props)=>{
     
 
     const nova_planilha = async () =>{
-
+        setIsLoading(true)
         const verificaSeCodigo = (codigoNome) =>{
             var retorno = false
             const baseCode= ['s2k4m5n7q8',
@@ -115,6 +116,7 @@ const PopupNewSheet = (props)=>{
                 (e)
             }
         };
+        setIsLoading(false)
         setVisible(false);
         props.funcLoadSheets();
 
@@ -183,7 +185,7 @@ const PopupNewSheet = (props)=>{
                                 style={{paddingTop:20}}
                                 onPress={(isChecked) => {setPlanilhaPrincipal(isChecked)}}
                             />
-                        <BotaoPadrao textoBotao="Criar Planilha" funcaoClick={nova_planilha} />
+                        <BotaoPadrao textoBotao="Criar Planilha" funcaoClick={nova_planilha} disabled={isLoading}/>
                         
                     </View>
                 </TouchableOpacity>

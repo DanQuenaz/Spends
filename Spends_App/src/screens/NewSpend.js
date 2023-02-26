@@ -42,6 +42,7 @@ const NewSpend = () =>{
     const [tags_selector, setTagsSelector] = useState(null);
     const [user_id, setUserId] = useState(null);
     const [parcelas, setParcelas] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [data_despesa, setDataDepesa] = useState(new Date());
 
@@ -81,6 +82,7 @@ const NewSpend = () =>{
     useEffect(()=>{
         async function fetchData(){
             // console.warn(valor_spend, num_cadastro)
+            setIsLoading(true)
             if((valor_spend !== "" && valor_spend != null) && descricao_spend !== ""){
                 let bodyRequest = {
                     owner_id: user_id,
@@ -139,6 +141,7 @@ const NewSpend = () =>{
                     }
                 }
             }
+            setIsLoading(false)
         }
         fetchData();
     }, [cadastrar_spend]);
@@ -274,6 +277,7 @@ const NewSpend = () =>{
                     <View style={{flex:0.15, justifyContent:'center', alignItems:'center'}}>
                         <TouchableOpacity
                             style={styles.botaoSave}
+                            disabled={isLoading}
                             onPress = { () => {
                                 setNumCadastro(1);
                                 setCadastrarSpend(!cadastrar_spend);
