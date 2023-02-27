@@ -1,2 +1,5 @@
 Spends_Server/node_modules
 Spends_App/node_modules
+Spends_App/android/app/release/app-release.apk
+keystore.jks
+Spends_App/android/app/release/output-metadata.json
