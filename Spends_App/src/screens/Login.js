@@ -4,10 +4,10 @@ import Tooltip from "react-native-walkthrough-tooltip";
 import { useNavigation } from "@react-navigation/native";
 
 import axios from "axios";
-import LocalStorage from "../class/LocalStorage";
 
 import login_style from "../styles/login_styles";
 import { useApi } from "../Hooks/useApi";
+import { useLocalStorage } from "../Hooks/useLocalStorage";
 import { Image } from "react-native";
 
 const Login = () => {
@@ -64,17 +64,15 @@ const Login = () => {
 
         try{
             const result = await useApi("/signin", body_request, "POST");
+            const localStorage = useLocalStorage()
             if(result.status == 200){
-                const localStorage= new LocalStorage()
                 axios.defaults.headers.common['Authorization'] = `bearer ${result.data.token}`
-                await localStorage.storeData("@TOKEN", result.data.token)
-                await localStorage.storeData("@USER_DATA", JSON.stringify(result.data))
-                (JSON.stringify(result.data));
+                await localStorage.storeData("@TOKEN", result.data.token);
+                await localStorage.storeData("@USER_DATA", JSON.stringify(result.data));
                 navigation.navigate("HomeIndex");
             }
         }catch(e){
             Alert.alert("Erro ao logar", "Erro ao logar " + e)
-            (e)
         }
     };
 

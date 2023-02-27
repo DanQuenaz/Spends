@@ -28,7 +28,7 @@ const MembrosPlanilha = (props)=>{
 
             const resultInviteCode = await useApi(`/sheets/get-invite-code?spread_sheet_id=${props.spread_sheet_id}`, null, "GET")
             if(resultMembers.status==200){
-                setInviteCode(resultInviteCode.data[0].INVITE_CODE)
+                if(resultInviteCode.data[0]) setInviteCode(resultInviteCode.data[0].INVITE_CODE)
             }
         }
         fetchData();

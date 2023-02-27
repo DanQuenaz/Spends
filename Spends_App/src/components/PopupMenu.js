@@ -1,12 +1,11 @@
 import React, {useState} from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Modal } from "react-native";
-import { TouchableOpacity, SafeAreaView, View, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
-import LocalStorage from "../class/LocalStorage";
-
-import colors from "../styles/colors";
+import { useLocalStorage } from "../Hooks/useLocalStorage";
+import User from "../class/User";
 
 const PopupMenu = ()=>{
     const [visible, setVisible] = useState(false);
@@ -14,14 +13,14 @@ const PopupMenu = ()=>{
 
     const logOff = async ()=>{
         try{
-            ("entrei aqui")
-            const localStorage = new LocalStorage()
+            const localStorage = useLocalStorage()
             await localStorage.removeData("@TOKEN");
             await localStorage.removeData("@USER_DATA");
             await localStorage.removeData("@DEFAULT_SHEET");
+            User.clearData();
             navigation.navigate("Main")
         }catch(e){
-            (e)
+            console.log(e)
         }
     };
 

@@ -20,4 +20,9 @@ export default class User{
     static setDefaultSpreadShet(value){
         User.defaultSpreadSheet = value;
     };
+
+    static clearData(){
+        User.user = {};
+        User.defaultSpreadSheet = "";
+    }
 }

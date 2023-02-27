@@ -6,15 +6,13 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import IconIonicons from 'react-native-vector-icons/Ionicons';
 
 import OneSignal from "react-native-onesignal";
 
 import moment from "moment/moment";
 import 'moment/locale/pt-br';
 
-
-import LocalStorage from "../class/LocalStorage";
+import { useLocalStorage } from "../Hooks/useLocalStorage";
 import User from "../class/User"
 import { formatToReal } from "../functions/number";
 import { useApi } from "../Hooks/useApi";
@@ -26,7 +24,6 @@ import PopupMenu from "../components/PopupMenu";
 
 import colors from "../styles/colors";
 import { ToastAndroid } from "react-native";
-import Swipeable from "react-native-gesture-handler";
 import { MonthSelector } from "../components/MonthSelector";
 import { MembrosPlanilha } from "../components/MembrosPlanilha";
 
@@ -52,7 +49,7 @@ const Home = () =>{
     const [total_gastos, setTotalGastos] = useState("...");
 
     const navigation = useNavigation();
-    const localStorage = new LocalStorage();
+    const localStorage = useLocalStorage()
 
     const atualizaFiltroMeses = useRef();
 
@@ -185,7 +182,7 @@ const Home = () =>{
             }
             
         }catch(e){
-            (e)
+            console.log(e)
             return e
         }
     };
@@ -255,7 +252,6 @@ const Home = () =>{
     
     const cadastrar_planilha = () =>{
         navigation.navigate("Sheets") 
-        // ("Opa")       
     }
 
     const openCadastroSpend = async ()=>{

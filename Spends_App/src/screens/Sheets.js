@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import User from "../class/User";
 import LocalStorage from "../class/LocalStorage";
-import BotaoAdicionar from "../components/BotaoAdicionar";
 import SemDados from "../components/SemDados";
 import { TelaSimples } from "../components/TelaSimples";
 import { StyleSheet } from "react-native";
@@ -20,15 +19,16 @@ import { useApi } from "../Hooks/useApi";
 import PopupNewSheet from "../components/PopUpNewSheet/PopupNewSheet";
 
 import { onShare } from "../functions/shareSheets";
+import { useLocalStorage } from "../Hooks/useLocalStorage";
 
 
 const Sheets = () =>{
     const [corpo, setCorpo] = useState(null);
-    const local_storage = new LocalStorage();
     const user_id = User.getUser().user_id;
 
     const route = useRoute();
     const navigation = useNavigation();
+    const local_storage = useLocalStorage()
 
     
 
@@ -53,8 +53,8 @@ const Sheets = () =>{
     };
 
     const definirPlanilhaPadrao = async (sheetId) =>{
-        const local_storage = new LocalStorage();
         await local_storage.storeData("@DEFAULT_SHEET", sheetId + '');
+        User.setDefaultSpreadShet(sheetId);
         navigation.navigate("Home");
     };
 
