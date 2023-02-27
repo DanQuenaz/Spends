@@ -9,14 +9,12 @@ module.exports = app => {
             del(req, res);
         };
         
-        ("BODY ", req.body);
         let sql = `INSERT INTO TB_SPENDS(OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, INSTALLMENT_DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
         
         let installments_aux = req.body.installments_info
         let first_installment = installments_aux.shift()
 
         let parametros = [[req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, req.body.description, first_installment.installment_description, req.body.total_value, first_installment.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(first_installment.date).format("YYYY-MM-DD HH:mm:ss")]]
-        ("1", parametros)
 
 
         app.db.query(sql, [parametros], (err, results, fields) => {
@@ -32,7 +30,6 @@ module.exports = app => {
                 parametros.push([insertId, req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, req.body.description, element.installment_description, req.body.total_value, element.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(element.date).format("YYYY-MM-DD HH:mm:ss")])
             });
 
-            ("2", parametros)
             app.db.query(sql, [parametros], (err, results, fields)=>{
                 if (err) {
                     return err => res.status(400).json(err);
@@ -67,7 +64,6 @@ module.exports = app => {
 
 
     const get = (req, res) => {
-        ("GET SPENDS ",  req.query)
         sql = `SELECT   TB_SPENDS.SPEND_ID
                         ,TB_USERS.NICKNAME
                         ,TB_SPREAD_SHEETS.NAME
