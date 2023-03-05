@@ -19,7 +19,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
-                console.log("Erro ao inserir despesa", err, new Date())
+                console.log("Erro ao inserir despesa 1", sql, err, new Date())
                 return err => res.status(400).json(err);
             }
 
@@ -33,7 +33,7 @@ module.exports = app => {
 
             app.db.query(sql, [parametros], (err, results, fields)=>{
                 if (err) {
-                    console.log("Erro ao inserir despesa", err, new Date())
+                    console.log("Erro ao inserir despesa 2", sql, err, new Date())
                     return err => res.status(400).json(err);
                 }
                 let sql = ` SELECT USER_ID
