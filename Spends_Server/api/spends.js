@@ -9,7 +9,7 @@ module.exports = app => {
             del(req, res);
         };
         
-        let sql = `INSERT INTO TB_SPENDS(OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, INSTALLMENT_DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
+        let sql_1 = `INSERT INTO TB_SPENDS(OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, INSTALLMENT_DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
         
         let installments_aux = req.body.installments_info
         let first_installment = installments_aux.shift()
@@ -17,13 +17,13 @@ module.exports = app => {
         let parametros = [[req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, req.body.description, first_installment.installment_description, req.body.total_value, first_installment.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(first_installment.date).format("YYYY-MM-DD HH:mm:ss")]]
 
 
-        app.db.query(sql, [parametros], (err, results, fields) => {
+        app.db.query(sql_1, [parametros], (err, results, fields) => {
             if (err) {
-                console.log("Erro ao inserir despesa 1", sql, err, new Date())
+                console.log("Erro ao inserir despesa 1", sql_1, err, new Date())
                 return err => res.status(400).json(err);
             }
 
-            let sql = `INSERT INTO TB_SPENDS(INSTALLMENT_ID, OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, INSTALLMENT_DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
+            let sql_2 = `INSERT INTO TB_SPENDS(INSTALLMENT_ID, OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, INSTALLMENT_DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
             let parametros = []
             let insertId = results.insertId
 
@@ -31,9 +31,9 @@ module.exports = app => {
                 parametros.push([insertId, req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, req.body.description, element.installment_description, req.body.total_value, element.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(element.date).format("YYYY-MM-DD HH:mm:ss")])
             });
 
-            app.db.query(sql, [parametros], (err, results, fields)=>{
+            app.db.query(sql_2, [parametros], (err, results, fields)=>{
                 if (err) {
-                    console.log("Erro ao inserir despesa 2", sql, err, new Date())
+                    console.log("Erro ao inserir despesa 2", sql_2, err, new Date())
                     return err => res.status(400).json(err);
                 }
                 let sql = ` SELECT USER_ID
