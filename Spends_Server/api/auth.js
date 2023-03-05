@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt-nodejs')
 module.exports = app => {
     
     const signin = async (req, res) => {
-        
+        console.log("Iniciando login", new Date())
         if (!req.body.email || !req.body.password) {
             return res.status(400).send('Dados incompletos')
         }
@@ -21,6 +21,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
+                console.log("Erro login", err, new Date())
               return err => res.status(400).send('Erro ao executar processo.')
             }
             const user = results[0];

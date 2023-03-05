@@ -4,6 +4,7 @@ const moment = require('moment');
 module.exports = app => {
     
     const new_sheet = (req, res) => {
+        console.log("Criando nova planilha", new Date())
         moment.locale('pt-br');
 
         const baseCode= ['s2k4m5n7q8',
@@ -31,6 +32,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
+                console.log("Erro ao criar planilha", err, new Date())
                 app.db.query(`ROLLBACK`);
                 return res.status(400).json(err);
             }
@@ -45,10 +47,12 @@ module.exports = app => {
 
             app.db.query(sql, [parametros], (err, results, fields) => {
                 if (err) {
+                    console.log("Erro ao criar planilha", err, new Date())
                     app.db.query(`ROLLBACK`);
                     return res.status(400).json(err);
                 }
                 app.db.query(`COMMIT`);
+                console.log("Planilha criada", new Date())
                 return res.status(201).json(dados_retorno)
             });
         });
@@ -56,7 +60,7 @@ module.exports = app => {
 
     const add_user_sheet = (req, res) => {
    
-
+        console.log("Adicionando usuario em planilha", new Date())
         sql = ` SELECT SPREAD_SHEET_ID
                 FROM TB_SPREAD_SHEETS
                 WHERE INVITE_CODE = ?
@@ -77,9 +81,11 @@ module.exports = app => {
                 
                 app.db.query(sql, [parametros], (err, results, fields) => {
                     if (err) {
+                        console.log("Erro ao adicionar usuario em planilha", err, new Date())
                         return res.status(405).json(err);
                     }
 
+                    console.log("Usuario adicionado em planilha", new Date())
                     return res.status(200).send();
                 });
             }else{
@@ -90,7 +96,7 @@ module.exports = app => {
 
     const del_sheet = (req, res) => {
         
-
+        console.log("Deletando planilha", new Date())
         app.db.query(`START TRANSACTION`);
 
         sql = ` SELECT OWNER_ID
@@ -101,6 +107,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
+                console.log("Erro ao deletar planilha", err, new Date())
                 app.db.query(`ROLLBACK`);
                 return res.status(405).json(err);
             }
@@ -114,11 +121,13 @@ module.exports = app => {
 
                 app.db.query(sql, [parametros], (err, results, fields) => {
                     if (err) {
+                        console.log("Erro ao deletar planilha", err, new Date())
                         app.db.query(`ROLLBACK`);
                         return res.status(405).json(err);
                     }
 
                     app.db.query(`COMMIT`);
+                    console.log("Planilha deletada", new Date())
                     return res.status(200).send()
                 });
             }else{
@@ -129,8 +138,7 @@ module.exports = app => {
     };
 
     const rename_sheet = (req, res) => {
-
-
+        console.log("Renomeando planilha", new Date())
         app.db.query(`START TRANSACTION`);
 
         sql = ` SELECT OWNER_ID
@@ -141,6 +149,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
+                console.log("Erro ao renomear planilha", err, new Date())
                 app.db.query(`ROLLBACK`);
                 return res.status(405).json(err);
             }
@@ -154,11 +163,13 @@ module.exports = app => {
 
                 app.db.query(sql, [parametros], (err, results, fields) => {
                     if (err) {
+                        console.log("Erro ao renomear planilha", err, new Date())
                         app.db.query(`ROLLBACK`);
                         return res.status(405).json(err);
                     }
 
                     app.db.query(`COMMIT`);
+                    console.log("PLanilha renomeada", new Date())
                     return res.status(200).send()
                 });
             }else{
@@ -169,8 +180,7 @@ module.exports = app => {
     };
 
     const get_sheets = (req, res) => {
-  
-      
+        console.log("Obtendo planilhas", new Date())
         sql = ` SELECT  TB_SPREAD_SHEETS.SPREAD_SHEET_ID
                         ,TB_SPREAD_SHEETS.NAME
                         ,TB_SPREAD_SHEETS.INVITE_CODE
@@ -189,7 +199,8 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
-              return err => res.status(400).send('Erro ao executar processo!');
+                console.log("Erro ao obter planilhas", err, new Date())
+                return err => res.status(400).send('Erro ao executar processo!');
             }
             res.status(200).json(results);
           });
@@ -217,6 +228,7 @@ module.exports = app => {
     };
 
     const get_sheet_members = (req, res)=>{
+        console.log("Obtendo membros da planilha", new Date())
         const sql = `
             SELECT TU.NICKNAME 
             FROM TB_SPREAD_SHEETS TSS 
@@ -231,6 +243,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results)=>{
             if(err){
+                console.log("Erro ao obter planilhas", err, new Date())
                 return res.status(400).send('Erro ao executar processo!');
             }
             res.status(200).json(results);
@@ -246,6 +259,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err)=>{
             if(err){
+                console.log("Erro ao remover membro de planilha", err, new Date())
                 return res.status(400).send("Erro ao executar processo!");
             }
             res.status(200).send("Usuário deletado");
@@ -258,11 +272,13 @@ module.exports = app => {
             FROM TB_SPREAD_SHEETS
             WHERE SPREAD_SHEET_ID = ?
         `
-
         const parametros = [[req.query.spread_sheet_id]]
 
         app.db.query(sql, [parametros], (err, results)=>{
-            if(err) return res.status(400).send("Erro ao executar query!");
+            if(err) {
+                console.log("Erro ao obter codigo de compartilhamento", err, new Date())
+                return res.status(400).send("Erro ao executar query!");
+            }
             res.status(200).json(results)
         })
     }

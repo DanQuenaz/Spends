@@ -9,6 +9,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
+                console.log("Erro ao inserir tag", err, new Date())
                 return err => res.status(400).json(err);
             }
 
@@ -28,6 +29,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
+                console.log("Erro ao obter tag", err, new Date())
                 return err => res.status(400).json(err);
             }
 
@@ -43,6 +45,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
+                console.log("Erro ao deletar tag", err, new Date())
                 return err => res.status(400).json(err);
             }
 
