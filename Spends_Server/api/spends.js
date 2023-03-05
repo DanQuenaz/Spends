@@ -19,6 +19,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
+                console.log("Erro ao inserir despesa", err, new Date())
                 return err => res.status(400).json(err);
             }
 
@@ -32,6 +33,7 @@ module.exports = app => {
 
             app.db.query(sql, [parametros], (err, results, fields)=>{
                 if (err) {
+                    console.log("Erro ao inserir despesa", err, new Date())
                     return err => res.status(400).json(err);
                 }
                 let sql = ` SELECT USER_ID
@@ -43,6 +45,7 @@ module.exports = app => {
 
                 app.db.query(sql, [parametros], (err, results, fields) => {
                     if (err) {
+                        console.log("Erro ao enviar notificacao", err, new Date())
                         // return err => res.status(400).json(err);
                     };
                     const users_keys = []
@@ -99,6 +102,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields) => {
             if (err) {
+                console.log("Erro ao obter despesas", err, new Date())
                 return err => res.status(400).json(err);
             }
 
@@ -117,6 +121,7 @@ module.exports = app => {
         // (sql)
         app.db.query(sql, [parametros], (err, results, fields)=>{
             if(err){
+                console.log("Erro ao deletar despesa", err, new Date())
                 return err=>res.status(400).json(err);
             }
             return res.status(200).send("Despesa deletada.")
@@ -139,6 +144,7 @@ module.exports = app => {
         parametros = [[req.body.spend_id]];
         app.db.query(sql, [parametros], (err, results, fields)=>{
             if(err){
+                console.log("Erro ao editar despesa", err, new Date())
                 return err=>res.status(400).json(err);
             }
             return res.status(200).send("Despesa atualizada.")
@@ -160,6 +166,7 @@ module.exports = app => {
 
         app.db.query(sql, [parametros], (err, results, fields)=>{
             if(err){
+                console.log("Erro ao obter meses de despesa", err, new Date())
                 return err => res.status(400).json(err);
             }
             return res.status(200).json(results);
