@@ -23,20 +23,25 @@ module.exports = app => {
                 return err => res.status(400).json(err);
             }
 
-            let sql_2 = `INSERT INTO TB_SPENDS(INSTALLMENT_ID, OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, INSTALLMENT_DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
-            let parametros = []
-            let insertId = results.insertId
+            if(installments_aux.length){
+                let sql_2 = `INSERT INTO TB_SPENDS(INSTALLMENT_ID, OWNER_ID, SPREAD_SHEET_ID, TAG_ID, DESCRIPTION, INSTALLMENT_DESCRIPTION, TOTAL_VALUE, VALUE, CLOSED, FIXED, TOTAL_INSTALLMENTS, INITIAL_DATE, DATE) VALUES ?`
+                let parametros = []
+                let insertId = results.insertId
 
-            installments_aux.forEach(element=>{
-                parametros.push([insertId, req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, req.body.description, element.installment_description, req.body.total_value, element.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(element.date).format("YYYY-MM-DD HH:mm:ss")])
-            });
 
-            app.db.query(sql_2, [parametros], (err, results, fields)=>{
-                if (err) {
-                    console.log("Erro ao inserir despesa 2", sql_2, err, new Date())
-                    return err => res.status(400).json(err);
-                }
-                let sql = ` SELECT USER_ID
+                installments_aux.forEach(element=>{
+                    parametros.push([insertId, req.body.owner_id, req.body.spread_sheet_id, req.body.tag_id, req.body.description, element.installment_description, req.body.total_value, element.value, 0, req.body.fixed, req.body.installments, moment(req.body.initial_date).format("YYYY-MM-DD HH:mm:ss"), moment(element.date).format("YYYY-MM-DD HH:mm:ss")])
+                });
+
+                app.db.query(sql_2, [parametros], (err, results, fields)=>{
+                    if (err) {
+                        console.log("Erro ao inserir despesa 2", sql_2, err, new Date())
+                        return err => res.status(400).json(err);
+                    }
+                });
+            }
+
+            let sql = ` SELECT USER_ID
                     FROM TB_USERS_SHEETS
                     WHERE   USER_ID != ${req.body.owner_id}
                             AND SPREAD_SHEET_ID = ?
@@ -60,7 +65,6 @@ module.exports = app => {
                     }
                 });
 
-            });
             return res.status(200).send()
         });
     }
