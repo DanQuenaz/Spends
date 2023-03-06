@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { LineChart, PieChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { TelaSimples } from "../components/TelaSimples";
@@ -40,28 +40,50 @@ const Charts = () =>{
         {label: 'Despesas por usuário', value: 'user'}
     ]);
 
+    function calculatePercentage(value, total) {
+        return ((value / total) * 100).toFixed(2) + '%';
+    }
+
     const atualizaGraficos = ()=>{
 
         if(tipo_grafico == 'tag'){
             if(dados_tag[0]){
+                const total = dados_tag.reduce((acc, { value }) => acc + value, 0);
                 setGrafico(
-                    <>
-                        <Text style={styles.chartCardTitle}>Despesas por categoria</Text>
-                        <PieChart
-                            data={dados_tag}
-                            width={Dimensions.get("window").width*0.96} // from react-native
-                            height={Dimensions.get("window").height*0.35}
-                            chartConfig={{
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`
-                            }}
-                            accessor={"total"}
-                            backgroundColor={"transparent"}
-                            paddingLeft={"15"}
-                            center={[0,0]}
-                            absolute
-                        />
-                    </> 
+                    <View style={{flex: 1, flexDirection:"column"}}>
+                        <View style={{flex: 0.4}}>
+                            <Text style={styles.chartCardTitle}>Despesas por categoria</Text>
+                            <PieChart
+                                data={dados_tag}
+                                width={Dimensions.get("window").width} // from react-native
+                                height={Dimensions.get("window").height*0.35}
+                                chartConfig={{
+                                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`
+                                }}
+                                accessor={"value"}
+                                backgroundColor={"transparent"}
+                                paddingLeft={"15"}
+                                center={[50,0]}
+                                absolute
+                                hasLegend={false}
+                            />
+                        </View>
+                        <View style={{flex: 1, marginTop:190}}>
+                            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                                <View style={styles.legendContainer}>
+                                    {dados_tag.map(({ name, value, color }) => (
+                                    <View style={styles.legendItem} key={name}>
+                                        <View style={[styles.legendColor, { backgroundColor: color }]} />
+                                        <Text style={styles.legendLabel}>
+                                        {name} - {calculatePercentage(value, total)} (R$ {value})
+                                        </Text>
+                                    </View>
+                                    ))}
+                                </View>
+                            </ScrollView>
+                        </View>
+                    </View> 
                  );
 
             }else{
@@ -74,24 +96,42 @@ const Charts = () =>{
             
         }else if(tipo_grafico == 'user'){
             if(dados_user[0]){
+                const total = dados_user.reduce((acc, { value }) => acc + value, 0);
                 setGrafico(
-                    <>
-                        <Text style={styles.chartCardTitle}>Despesas por usuario</Text>
-                        <PieChart
-                            data={dados_user}
-                            width={Dimensions.get("window").width*0.96} // from react-native
-                            height={Dimensions.get("window").height*0.35}
-                            chartConfig={{
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`
-                            }}
-                            accessor={"total"}
-                            backgroundColor={"transparent"}
-                            paddingLeft={"15"}
-                            center={[0,0]}
-                            absolute
-                        />
-                    </> 
+                    <View style={{flex: 1, flexDirection:"column"}}>
+                        <View style={{flex: 0.4}}>
+                            <Text style={styles.chartCardTitle}>Despesas por categoria</Text>
+                            <PieChart
+                                data={dados_user}
+                                width={Dimensions.get("window").width} // from react-native
+                                height={Dimensions.get("window").height*0.35}
+                                chartConfig={{
+                                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`
+                                }}
+                                accessor={"value"}
+                                backgroundColor={"transparent"}
+                                paddingLeft={"15"}
+                                center={[50,0]}
+                                absolute
+                                hasLegend={false}
+                            />
+                        </View>
+                        <View style={{flex: 1, marginTop:190}}>
+                            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                                <View style={styles.legendContainer}>
+                                    {dados_user.map(({ name, value, color }) => (
+                                    <View style={styles.legendItem} key={name}>
+                                        <View style={[styles.legendColor, { backgroundColor: color }]} />
+                                        <Text style={styles.legendLabel}>
+                                        {name} - {calculatePercentage(value, total)} (R$ {value})
+                                        </Text>
+                                    </View>
+                                    ))}
+                                </View>
+                            </ScrollView>
+                        </View>
+                    </View> 
                  )
 
             }else{
@@ -177,19 +217,14 @@ const Charts = () =>{
                 
                 const result = await useApi(`/charts?spread_sheet_id=${spread_sheet_id}&type=${tipo_grafico}&month=${mes_ano_selecionado.mes}&year=${mes_ano_selecionado.ano}`, null, 'GET');
                 if(result.status == 200){
-                    (result.data)
+                    console.log(result.data)
                     if(tipo_grafico == 'tag'){
                         var dados_aux = [];
-                        var total_aux = 0;
-
-                        result.data.forEach(item=>{
-                            total_aux += Math.round(item.TOTAL);
-                        });
 
                         result.data.forEach(item=>{
                             dados_aux.push({
                                 name: item.NAME,
-                                total: Math.round( item.TOTAL*100/total_aux),
+                                value: item.TOTAL,
                                 color: getRandomColor(),
                                 legendFontColor: colors.branco,
                                 legendFontSize: 15
@@ -198,16 +233,11 @@ const Charts = () =>{
                         setDadosTag(dados_aux);
                     }else if(tipo_grafico == 'user'){
                         var dados_aux = [];
-                        var total_aux = 0;
-
-                        result.data.forEach(item=>{
-                            total_aux += Math.round(item.TOTAL);
-                        });
 
                         result.data.forEach(item=>{
                             dados_aux.push({
                                 name: item.NICKNAME,
-                                total: Math.round( item.TOTAL*100/total_aux),
+                                value: item.TOTAL,
                                 color: getRandomColor(),
                                 legendFontColor: colors.branco,
                                 legendFontSize: 15
@@ -225,7 +255,6 @@ const Charts = () =>{
                         
                         setDadosMes(dados_aux);
                         setLabelsMes(labels_aux);
-                        console.warn(dados_aux, labels_aux);
                     }
                 }
             }catch(e){
@@ -263,7 +292,7 @@ const Charts = () =>{
 
                 <View style={styles.chartCard}>
                     <BackCard>
-                        <View style={{flex:0.5}}>
+                        <View style={{flex:1}}>
                             {grafico}
                         </View>
                     </BackCard>
@@ -278,7 +307,7 @@ const Charts = () =>{
 
 const styles = StyleSheet.create({
     chartCard:{
-        flex:0.5,
+        flex:0.7,
         marginTop:5,
         zIndex:0
     },
@@ -311,7 +340,40 @@ const styles = StyleSheet.create({
         color:colors.branco,
         fontSize:35,
         paddingTop:50
-    }
+    },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff',
+      },
+      legendContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        marginTop: 30,
+      },
+      legendItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 20,
+        marginBottom: 10,
+      },
+      legendColor: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        marginRight: 5,
+      },
+      legendLabel: {
+        fontSize: 16,
+        color:colors.branco
+      },
+      scrollViewContent: {
+        flexGrow: 1,
+      },
+
 
 });
 
