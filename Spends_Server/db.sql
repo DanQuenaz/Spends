@@ -78,3 +78,8 @@ CREATE VIEW v_totais_planilhas AS select TB_SPENDS.SPREAD_SHEET_ID AS SPREAD_SHE
 ,sum(TB_SPENDS.VALUE) AS TOTAL_VALUE 
 from TB_SPENDS 
 group by TB_SPENDS.SPREAD_SHEET_ID;
+
+INSERT INTO TB_TAGS
+(OWNER_ID, NAME, DEFAULT_TAG)
+VALUES (1, 'Casa', 1), (1, 'Supermercado', 1), (1, 'Lazer', 1), (1, 'Contas', 1), (1, 'Financiamentos', 1);
+
